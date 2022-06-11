@@ -19,6 +19,9 @@ var (
 	playerDest rl.Rectangle
 
 	playerSpeed float32 = 3.0
+
+	musicPaused bool
+	music       rl.Music
 )
 
 func drawScene() {
@@ -39,12 +42,20 @@ func input() {
 	if rl.IsKeyDown(rl.KeyD) || rl.IsKeyDown(rl.KeyRight) {
 		playerDest.X += playerSpeed
 	}
-
+	if rl.IsKeyPressed(rl.KeyQ) {
+		musicPaused = !musicPaused
+	}
 }
 
 func update() {
 	running = !rl.WindowShouldClose()
 
+	rl.UpdateMusicStream(music)
+	if musicPaused {
+		rl.PauseMusicStream(music)
+	} else {
+		rl.ResumeMusicStream(music)
+	}
 }
 
 func render() {
@@ -67,11 +78,17 @@ func init() {
 	playerSrc = rl.NewRectangle(0, 0, 48, 48)
 	playerDest = rl.NewRectangle(200, 200, 100, 100)
 
+	rl.InitAudioDevice()
+	music = rl.LoadMusicStream("res/sproutlings_loopable.mp3")
+	musicPaused = false
+	rl.PlayMusicStream(music)
 }
 
 func quit() {
 	rl.UnloadTexture(grassSprite)
 	rl.UnloadTexture(playerSprite)
+	rl.UnloadMusicStream(music)
+	rl.CloseAudioDevice()
 	rl.CloseWindow()
 }
 
