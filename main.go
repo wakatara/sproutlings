@@ -22,6 +22,8 @@ var (
 
 	musicPaused bool
 	music       rl.Music
+
+	cam rl.Camera2D
 )
 
 func drawScene() {
@@ -56,14 +58,20 @@ func update() {
 	} else {
 		rl.ResumeMusicStream(music)
 	}
+
+	cam.Target = rl.NewVector2(float32(playerDest.X-(playerDest.Width/2)), float32(playerDest.Y-(playerDest.Height/2)))
+
 }
 
 func render() {
 	rl.BeginDrawing()
 	rl.ClearBackground(bkgColor)
 
+	rl.BeginMode2D(cam)
+
 	drawScene()
 
+	rl.EndMode2D()
 	rl.EndDrawing()
 }
 
@@ -82,6 +90,11 @@ func init() {
 	music = rl.LoadMusicStream("res/sproutlings_loopable.mp3")
 	musicPaused = false
 	rl.PlayMusicStream(music)
+
+	cam = rl.NewCamera2D(rl.NewVector2(float32(screenWidth/2), float32(screenHeight/2)),
+		rl.NewVector2(float32(playerDest.X-(playerDest.Width/2)), float32(playerDest.Y-(playerDest.Height/2))),
+		0, 1.0)
+
 }
 
 func quit() {
