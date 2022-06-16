@@ -138,7 +138,7 @@ func init() {
 
 	cam = rl.NewCamera2D(rl.NewVector2(float32(screenWidth/2), float32(screenHeight/2)),
 		rl.NewVector2(float32(playerDest.X-(playerDest.Width/2)), float32(playerDest.Y-(playerDest.Height/2))),
-		0, 1.0)
+		0, 1.5)
 
 }
 
