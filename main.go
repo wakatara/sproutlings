@@ -66,7 +66,7 @@ func input() {
 func update() {
 	running = !rl.WindowShouldClose()
 
-	playerSrc.X = 0
+	playerSrc.X = playerSrc.Width * float32(playerFrame)
 	if playerMoving {
 		if playerUp {
 			playerDest.Y -= playerSpeed
@@ -83,15 +83,19 @@ func update() {
 		if frameCount%8 == 1 {
 			playerFrame++
 		}
-		// Set Src.X back to 0 if he stops moving
-		playerSrc.X = playerSrc.Width * float32(playerFrame)
-
+	} else if frameCount%45 == 1 {
+		playerFrame++
 	}
+
 	frameCount++
 	if playerFrame > 3 {
 		playerFrame = 0
 	}
+	if !playerMoving && playerFrame > 1 {
+		playerFrame = 0
+	}
 
+	playerSrc.X = playerSrc.Width * float32(playerFrame)
 	playerSrc.Y = playerSrc.Height * float32(playerDir)
 
 	rl.UpdateMusicStream(music)
