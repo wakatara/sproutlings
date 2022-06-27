@@ -25,6 +25,13 @@ var (
 
 	frameCount int
 
+	tileDest  rl.Rectangle
+	tileSrc   rl.Rectangle
+	tileMap   []int
+	srcMap    []string
+	mapWidth  int
+	mapHeight int
+
 	musicPaused bool
 	music       rl.Music
 
@@ -32,9 +39,19 @@ var (
 )
 
 func drawScene() {
-	rl.DrawTexture(grassSprite, 100, 50, rl.White)
-	rl.DrawTexturePro(playerSprite, playerSrc, playerDest, rl.NewVector2(playerDest.Width, playerDest.Height), 0, rl.White)
+	// rl.DrawTexture(grassSprite, 100, 50, rl.White)
+	for i := 0; i < len(tileMap); i++ {
+		if tileMap[i] != 0 {
+			tileDest.X = tileDest.Width + float32(i%mapWidth)
+			tileDest.Y = tileDest.Height + float32(i/mapWidth)
+			tileSrc.X = tileSrc.Width * float32((tileMap[i]-1)%int(grassSprite.Width/int32(tileSrc.Width)))
+			tileSrc.Y = tileSrc.Height * float32((tileMap[i]-1)/int(grassSprite.Width/int32(tileSrc.Width)))
 
+			rl.DrawTexturePro(grassSprite, tileSrc, tileDest, rl.NewVector2(tileDest.Width, tileDest.Height), 0, rl.White)
+		}
+	}
+
+	rl.DrawTexturePro(playerSprite, playerSrc, playerDest, rl.NewVector2(playerDest.Width, playerDest.Height), 0, rl.White)
 }
 
 func input() {
@@ -124,12 +141,23 @@ func render() {
 	rl.EndDrawing()
 }
 
+func loadMap() {
+	mapWidth = 100
+	mapHeight = 100
+	for i := 0; i < (mapWidth * mapHeight); i++ {
+		tileMap = append(tileMap, 1)
+	}
+}
+
 func init() {
 	rl.InitWindow(screenWidth, screenHeight, "Sproutlings!")
 	rl.SetExitKey(0)
 	rl.SetTargetFPS(fps)
 
 	grassSprite = rl.LoadTexture("res/SproutLands/Tilesets/grass.png")
+	tileDest = rl.NewRectangle(0, 0, 16, 16)
+	tileSrc = rl.NewRectangle(0, 0, 16, 16)
+
 	playerSprite = rl.LoadTexture("res/SproutLands/characters/Basic Charakter Spritesheet.png")
 
 	playerSrc = rl.NewRectangle(0, 0, 48, 48)
@@ -144,6 +172,7 @@ func init() {
 		rl.NewVector2(float32(playerDest.X-(playerDest.Width/2)), float32(playerDest.Y-(playerDest.Height/2))),
 		0, 1.5)
 
+	loadMap()
 }
 
 func quit() {
