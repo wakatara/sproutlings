@@ -1,6 +1,14 @@
 package main
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+	"strconv"
+	"strings"
+
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 const (
 	screenWidth  = 1000
@@ -42,8 +50,8 @@ func drawScene() {
 	// rl.DrawTexture(grassSprite, 100, 50, rl.White)
 	for i := 0; i < len(tileMap); i++ {
 		if tileMap[i] != 0 {
-			tileDest.X = tileDest.Width + float32(i%mapWidth)
-			tileDest.Y = tileDest.Height + float32(i/mapWidth)
+			tileDest.X = tileDest.Width * float32(i%mapWidth)
+			tileDest.Y = tileDest.Height * float32(i/mapWidth)
 			tileSrc.X = tileSrc.Width * float32((tileMap[i]-1)%int(grassSprite.Width/int32(tileSrc.Width)))
 			tileSrc.Y = tileSrc.Height * float32((tileMap[i]-1)/int(grassSprite.Width/int32(tileSrc.Width)))
 
@@ -141,11 +149,26 @@ func render() {
 	rl.EndDrawing()
 }
 
-func loadMap() {
-	mapWidth = 100
-	mapHeight = 100
-	for i := 0; i < (mapWidth * mapHeight); i++ {
-		tileMap = append(tileMap, 1)
+func loadMap(mapFile string) {
+	file, err := ioutil.ReadFile(mapFile)
+	if err != nil {
+		fmt.Errorf("Map File did not load: %v", err)
+		os.Exit(1)
+	}
+	remNewLines := strings.Replace(string(file), "\n", " ", -1)
+	sliced := strings.Split(remNewLines, " ")
+	mapWidth = -1
+	mapHeight = -1
+	for _, me := range sliced {
+		s, _ := strconv.ParseInt(me, 10, 64)
+		m := int(s)
+		if mapWidth == -1 {
+			mapWidth = m
+		} else if mapHeight == -1 {
+			mapHeight = m
+		} else {
+			tileMap = append(tileMap, m)
+		}
 	}
 }
 
@@ -172,7 +195,7 @@ func init() {
 		rl.NewVector2(float32(playerDest.X-(playerDest.Width/2)), float32(playerDest.Y-(playerDest.Height/2))),
 		0, 1.5)
 
-	loadMap()
+	loadMap("one.map")
 }
 
 func quit() {
