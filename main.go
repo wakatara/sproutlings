@@ -34,7 +34,7 @@ var (
 	playerMoving                                  bool
 	playerDir                                     int
 	playerUp, playerDown, playerRight, playerLeft bool
-	playerSpeed                                   float32 = 3.0
+	playerSpeed                                   float32 = 1.4
 	playerFrame                                   int
 
 	frameCount int
@@ -219,7 +219,7 @@ func init() {
 	playerSprite = rl.LoadTexture("res/SproutLands/characters/Basic Charakter Spritesheet.png")
 
 	playerSrc = rl.NewRectangle(0, 0, 48, 48)
-	playerDest = rl.NewRectangle(200, 200, 100, 100)
+	playerDest = rl.NewRectangle(200, 200, 60, 60)
 
 	rl.InitAudioDevice()
 	music = rl.LoadMusicStream("res/sproutlings_loopable.mp3")
@@ -229,6 +229,8 @@ func init() {
 	cam = rl.NewCamera2D(rl.NewVector2(float32(screenWidth/2), float32(screenHeight/2)),
 		rl.NewVector2(float32(playerDest.X-(playerDest.Width/2)), float32(playerDest.Y-(playerDest.Height/2))),
 		0, 1.5)
+
+	cam.Zoom = 3
 
 	loadMap("one.map")
 }
