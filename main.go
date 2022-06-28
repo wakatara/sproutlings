@@ -209,8 +209,8 @@ func init() {
 
 	grassSprite = rl.LoadTexture("res/SproutLands/Tilesets/Grass.png")
 	hillSprite = rl.LoadTexture("res/SproutLands/Tilesets/Hills.png")
-	fenceSprite = rl.LoadTexture("res/SproutLands/Tilesets/Building Parts/Fences.png")
-	houseSprite = rl.LoadTexture("res/SproutLands/Tilesets/Building Parts/Wooden House.png")
+	fenceSprite = rl.LoadTexture("res/SproutLands/Tilesets/Basic Fences.png")
+	houseSprite = rl.LoadTexture("res/SproutLands/Tilesets/Basic Wooden House.png")
 	waterSprite = rl.LoadTexture("res/SproutLands/Tilesets/Water.png")
 	tilledSprite = rl.LoadTexture("res/SproutLands/Tilesets/Tilled Dirt.png")
 	tileDest = rl.NewRectangle(0, 0, 16, 16)
