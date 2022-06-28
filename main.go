@@ -21,6 +21,11 @@ var (
 	bkgColor = rl.NewColor(147, 211, 196, 255)
 
 	grassSprite  rl.Texture2D
+	hillSprite   rl.Texture2D
+	fenceSprite  rl.Texture2D
+	houseSprite  rl.Texture2D
+	waterSprite  rl.Texture2D
+	tilledSprite rl.Texture2D
 	tex          rl.Texture2D
 	playerSprite rl.Texture2D
 
@@ -57,6 +62,16 @@ func drawScene() {
 			switch srcMap[i] {
 			case "g":
 				tex = grassSprite
+			case "l":
+				tex = hillSprite
+			case "f":
+				tex = fenceSprite
+			case "h":
+				tex = houseSprite
+			case "w":
+				tex = waterSprite
+			case "t":
+				tex = tilledSprite
 			}
 
 			tileSrc.X = tileSrc.Width * float32((tileMap[i]-1)%int(tex.Width/int32(tileSrc.Width)))
@@ -186,7 +201,12 @@ func init() {
 	rl.SetExitKey(0)
 	rl.SetTargetFPS(fps)
 
-	grassSprite = rl.LoadTexture("res/SproutLands/Tilesets/grass.png")
+	grassSprite = rl.LoadTexture("res/SproutLands/Tilesets/Grass.png")
+	hillSprite = rl.LoadTexture("res/SproutLands/Tilesets/Hills.png")
+	fenceSprite = rl.LoadTexture("res/SproutLands/Tilesets/Building Parts/Fences.png")
+	houseSprite = rl.LoadTexture("res/SproutLands/Tilesets/Wooden House.png")
+	waterSprite = rl.LoadTexture("res/SproutLands/Tilesets/Water.png")
+	tilledSprite = rl.LoadTexture("res/SproutLands/Tilesets/Tilled Dirt.png")
 	tileDest = rl.NewRectangle(0, 0, 16, 16)
 	tileSrc = rl.NewRectangle(0, 0, 16, 16)
 
