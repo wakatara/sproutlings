@@ -73,6 +73,12 @@ func drawScene() {
 			case "t":
 				tex = tilledSprite
 			}
+			// you need to draw grass below a fence or house part first
+			if srcMap[i] == "f" || srcMap[i] == "h" {
+				tileSrc.X = 0
+				tileSrc.Y = 0
+				rl.DrawTexturePro(grassSprite, tileSrc, tileDest, rl.NewVector2(tileDest.Width, tileDest.Height), 0, rl.White)
+			}
 
 			tileSrc.X = tileSrc.Width * float32((tileMap[i]-1)%int(tex.Width/int32(tileSrc.Width)))
 			tileSrc.Y = tileSrc.Height * float32((tileMap[i]-1)/int(tex.Width/int32(tileSrc.Width)))
@@ -204,7 +210,7 @@ func init() {
 	grassSprite = rl.LoadTexture("res/SproutLands/Tilesets/Grass.png")
 	hillSprite = rl.LoadTexture("res/SproutLands/Tilesets/Hills.png")
 	fenceSprite = rl.LoadTexture("res/SproutLands/Tilesets/Building Parts/Fences.png")
-	houseSprite = rl.LoadTexture("res/SproutLands/Tilesets/Wooden House.png")
+	houseSprite = rl.LoadTexture("res/SproutLands/Tilesets/Building Parts/Wooden House.png")
 	waterSprite = rl.LoadTexture("res/SproutLands/Tilesets/Water.png")
 	tilledSprite = rl.LoadTexture("res/SproutLands/Tilesets/Tilled Dirt.png")
 	tileDest = rl.NewRectangle(0, 0, 16, 16)
