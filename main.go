@@ -21,6 +21,7 @@ var (
 	bkgColor = rl.NewColor(147, 211, 196, 255)
 
 	grassSprite  rl.Texture2D
+	tex          rl.Texture2D
 	playerSprite rl.Texture2D
 
 	playerSrc                                     rl.Rectangle
@@ -52,10 +53,16 @@ func drawScene() {
 		if tileMap[i] != 0 {
 			tileDest.X = tileDest.Width * float32(i%mapWidth)
 			tileDest.Y = tileDest.Height * float32(i/mapWidth)
-			tileSrc.X = tileSrc.Width * float32((tileMap[i]-1)%int(grassSprite.Width/int32(tileSrc.Width)))
-			tileSrc.Y = tileSrc.Height * float32((tileMap[i]-1)/int(grassSprite.Width/int32(tileSrc.Width)))
 
-			rl.DrawTexturePro(grassSprite, tileSrc, tileDest, rl.NewVector2(tileDest.Width, tileDest.Height), 0, rl.White)
+			switch srcMap[i] {
+			case "g":
+				tex = grassSprite
+			}
+
+			tileSrc.X = tileSrc.Width * float32((tileMap[i]-1)%int(tex.Width/int32(tileSrc.Width)))
+			tileSrc.Y = tileSrc.Height * float32((tileMap[i]-1)/int(tex.Width/int32(tileSrc.Width)))
+
+			rl.DrawTexturePro(tex, tileSrc, tileDest, rl.NewVector2(tileDest.Width, tileDest.Height), 0, rl.White)
 		}
 	}
 
@@ -159,15 +166,17 @@ func loadMap(mapFile string) {
 	sliced := strings.Split(remNewLines, " ")
 	mapWidth = -1
 	mapHeight = -1
-	for _, me := range sliced {
+	for i, me := range sliced {
 		s, _ := strconv.ParseInt(me, 10, 64)
 		m := int(s)
 		if mapWidth == -1 {
 			mapWidth = m
 		} else if mapHeight == -1 {
 			mapHeight = m
-		} else {
+		} else if i < mapHeight*mapWidth+2 {
 			tileMap = append(tileMap, m)
+		} else {
+			srcMap = append(srcMap, sliced[i])
 		}
 	}
 }
